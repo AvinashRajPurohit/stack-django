@@ -1,0 +1,97 @@
+{% extends 'stack_search/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Home{% endblock title %}
+{% block content %}
+<div class="container">
+              {% if is_data %}
+
+    <h2 class="text-center mt-2">Here are your query Results..</h2>
+    <div class="text-center ">
+    <span class="badge badge-warning mt-2">{{q}}</span>
+        </div>
+    {% endif %}
+  <div class="row">
+
+    <div class="col-lg-10 mx-auto">
+      <div class="bg-white p-5 rounded shadow">
+
+          {% if is_data %}
+          {% for i in data %}
+
+          <div class="card">
+              <div class="card-header">Stackoverflow Result</div>
+              <h6 class="ml-1 mt-1 text-center card-title">Que. - {{i.title}}</h6>
+              <h6 class="ml-1 mt-1"><b>Views: </b><span>{{i.view_count}}</span></h6>
+              <h6 class="ml-1 mt-1"><b>Question Tags: </b><span>{{i.tags}}</span></h6>
+              <h6 class="ml-1 mt-1"><b>Owner Name: </b><span>{{i.owner.display_name}} (User id: {{i.owner.user_id}}, User type: {{i.owner.user_type}})</span></h6>
+              <a class="mt-3 btn btn-outline-info  float-right" target="_blank" href="{{i.link}}">View On Stack overflow</a>
+              <div class="card-body">
+
+              </div>
+          </div>
+          <br>
+          <hr>
+
+            {% endfor %}
+          {% if data.has_other_pages %}
+          <ul class="pagination mt-4">
+            {% for i in data.paginator.page_range %}
+              {% if data.number == i %}
+                <li class="btn  btn-outline-primary active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+              {% else %}
+                <li><a class="btn  btn-outline-primary" id="next_num{{i}}" href="?page={{ i }}&">{{ i }}</a></li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+{% endif %}
+          {% else %}
+     <h5 class="font-weight-light mb-4 text-center">You can search question here...</h5>
+<div class="card">
+      <div class="text-center">
+          <h5 class="card-header">Search Question Here..</h5>
+      </div>
+    <div class="card-body">
+        <form method="GET">
+          {{form|crispy}}
+            <input type="text" name="is_search" value="search_data" hidden>
+            <button type="submit" class="float-right btn btn-primary">Search Now</button>
+        </form>
+          </div>
+          </div>
+          {% endif %}
+
+      </div>
+    </div>
+  </div>
+
+</div>
+<script>
+    var host = window.location.protocol + "//" + window.location.host +'/';
+
+    for (i=1; i<={{max}}; i++)
+    {
+    if (i=={{data.number}}){
+        continue;
+    }
+    else{
+        var id = 'next_num'+i.toString()
+
+        assign_url(id)
+        }
+    }
+
+
+function assign_url(id) {
+    url_string = window.location.href
+    var url = new URL(url_string);
+    url.searchParams.delete('page');
+    history.replaceState(null, null, url)
+    url = url.toString()
+    url = url.replace(host, '')
+    url = url.replace('?', '')
+    document.getElementById(id).href += url
+}
+
+
+</script>
+{% endblock content %}
