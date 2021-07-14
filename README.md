@@ -14,7 +14,7 @@ $ django-admin --version
 
 The first thing to do is to clone the repository:
 ```sh
-$ https://github.com/prijittech/digital_album.git
+$  git clone https://github.com/AvinashRajPurohit/stack-django.git
 $ git checkout master
 $ cd stack-django
 ```
